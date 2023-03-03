@@ -1,0 +1,9 @@
+node_modules
+public
+.next
+.eslintrc.json
+package.json
+package-lock.json
+tsconfig.json
+.gitignore
+*.d.ts

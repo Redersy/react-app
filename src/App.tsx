@@ -1,8 +1,12 @@
-import React from 'react'
-import withProviders from 'app/providers'
+import withProviders from "app/providers";
+import Button from "shared/ui/Button";
 
 const App = (): JSX.Element => {
-  return <>111</>
-}
+  return (
+    <>
+      <Button>Button</Button>
+    </>
+  );
+};
 
-export default withProviders(App)
+export default withProviders(App);

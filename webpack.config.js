@@ -1,29 +1,28 @@
-const path = require('path')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const Dotenv = require('dotenv-webpack')
-const TerserPlugin = require('terser-webpack-plugin')
-const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin')
+const path = require("path");
+const Dotenv = require("dotenv-webpack");
+const TerserPlugin = require("terser-webpack-plugin");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 
 module.exports = () => {
   return {
-    entry: './index.tsx',
-    devtool: 'source-map',
-    mode: 'development',
+    entry: "./index.tsx",
+    devtool: "source-map",
+    mode: "development",
     plugins: [
       new HtmlWebpackPlugin({
-        template: path.resolve(__dirname, 'public', 'index.html')
+        template: path.resolve(__dirname, "public", "index.html")
       }),
       new Dotenv()
     ],
     resolve: {
-      extensions: ['.ts', '.tsx', '.js'],
+      extensions: [".ts", ".tsx", ".js"],
       plugins: [
         new TsconfigPathsPlugin({
-          configFile: './tsconfig.json',
-          logLevel: 'info',
-          extensions: ['.ts', '.tsx'],
-          mainFields: ['browser', 'main']
-          // baseUrl: "/foo"
+          configFile: "./tsconfig.json",
+          logLevel: "info",
+          extensions: [".ts", ".tsx"],
+          mainFields: ["browser", "main"]
         })
       ]
     },
@@ -32,15 +31,41 @@ module.exports = () => {
         {
           test: /\.(ts|tsx)$/,
           exclude: /^node_modules/,
-          loader: 'ts-loader',
+          loader: "ts-loader",
           options: {
-            configFile: './tsconfig.json'
+            configFile: "./tsconfig.json"
           }
+        },
+        {
+          test: /\.module\.s[ac]ss$/,
+          use: [
+            {
+              loader: "style-loader"
+            },
+            {
+              loader: "css-loader",
+              options: {
+                importLoaders: 1,
+                modules: {
+                  localIdentName: "[local]--[hash:base64:5]",
+                  mode: "local"
+                }
+              }
+            },
+            {
+              loader: "sass-loader"
+            }
+          ]
+        },
+        {
+          test: /\.s[ac]ss$/i,
+          exclude: /\.module\.s[ac]ss$/,
+          use: ["style-loader", "sass-loader"]
         }
       ]
     },
     devServer: {
-      watchFiles: path.join(__dirname, 'src')
+      watchFiles: path.join(__dirname, "src")
     },
     optimization: {
       minimize: true,
@@ -51,7 +76,7 @@ module.exports = () => {
         })
       ],
       splitChunks: {
-        chunks: 'async',
+        chunks: "async",
         minSize: 20000,
         minRemainingSize: 0,
         minChunks: 1,
@@ -72,5 +97,5 @@ module.exports = () => {
         }
       }
     }
-  }
-}
+  };
+};

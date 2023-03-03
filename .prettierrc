@@ -1,0 +1,12 @@
+{
+  "printWidth": 120,
+  "endOfLine": "auto",
+  "useTabs": false,
+  "tabWidth": 2,
+  "singleQuote": false,
+  "trailingComma": "none",
+  "jsxSingleQuote": false,
+  "semi": true,
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true
+}
