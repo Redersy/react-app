@@ -21,5 +21,5 @@
         "react",
         "@typescript-eslint"
     ],
-    "ignorePatterns": ["webpack.config.js", "tsconfig.json"]
+    "ignorePatterns": ["*.config.js", "tsconfig.json"]
 }

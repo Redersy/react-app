@@ -3,15 +3,19 @@ const Dotenv = require("dotenv-webpack");
 const TerserPlugin = require("terser-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = () => {
   return {
     entry: "./index.tsx",
     devtool: "source-map",
-    mode: "development",
+    mode: "production",
     plugins: [
       new HtmlWebpackPlugin({
         template: path.resolve(__dirname, "public", "index.html")
+      }),
+      new MiniCssExtractPlugin({
+        filename: "[name].[contenthash].css"
       }),
       new Dotenv()
     ],
@@ -40,7 +44,10 @@ module.exports = () => {
           test: /\.module\.s[ac]ss$/,
           use: [
             {
-              loader: "style-loader"
+              loader: MiniCssExtractPlugin.loader,
+              options: {
+                publicPath: path.resolve(__dirname, "dist/css")
+              }
             },
             {
               loader: "css-loader",
@@ -54,18 +61,47 @@ module.exports = () => {
             },
             {
               loader: "sass-loader"
+            },
+            {
+              loader: "postcss-loader",
+              options: {
+                postcssOptions: {
+                  config: path.resolve(__dirname, "src/app/webpack", "postcss.config.js")
+                }
+              }
             }
           ]
         },
         {
           test: /\.s[ac]ss$/i,
           exclude: /\.module\.s[ac]ss$/,
-          use: ["style-loader", "sass-loader"]
+          use: [
+            {
+              loader: MiniCssExtractPlugin.loader,
+              options: {
+                publicPath: path.resolve(__dirname, "dist/css")
+              }
+            },
+            "css-loader",
+            "sass-loader",
+            {
+              loader: "postcss-loader",
+              options: {
+                postcssOptions: {
+                  config: path.resolve(__dirname, "src/app/webpack", "postcss.config.js")
+                }
+              }
+            }
+          ]
         }
       ]
     },
     devServer: {
       watchFiles: path.join(__dirname, "src")
+    },
+    output: {
+      path: path.resolve(__dirname, "./dist"),
+      filename: "[contenthash].bundle.js"
     },
     optimization: {
       minimize: true,
@@ -80,9 +116,7 @@ module.exports = () => {
         minSize: 20000,
         minRemainingSize: 0,
         minChunks: 1,
-        maxAsyncRequests: 30,
-        maxInitialRequests: 30,
-        enforceSizeThreshold: 50000,
+        enforceSizeThreshold: 5000,
         cacheGroups: {
           defaultVendors: {
             test: /[\\/]node_modules[\\/]/,
