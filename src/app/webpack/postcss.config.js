@@ -1,10 +1,13 @@
+const postcssPresetEnv = require("postcss-preset-env");
+
 module.exports = {
-  plugins: {
-    "postcss-import": {},
-    "postcss-preset-env": {
-      browsers: "last 4 versions",
-      stage: 0
-    },
-    cssnano: {}
-  }
+  plugins: [
+    "postcss-flexbugs-fixes",
+    postcssPresetEnv({
+      stage: 3,
+      autoprefixer: { grid: true }
+    }),
+    "postcss-normalize",
+    "cssnano"
+  ]
 };
